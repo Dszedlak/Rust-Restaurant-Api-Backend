@@ -1,0 +1,26 @@
+name: Security audit
+on: 
+  push:
+    branches:
+      - master
+    paths: 
+      - '**/Cargo.toml'
+      - '**/Cargo.lock'
+  pull_request:
+    branches:
+      - master
+    paths: 
+      - '**/Cargo.toml'
+      - '**/Cargo.lock'
+  workflow_dispatch:
+jobs:
+  security_audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Run audit
+        uses: actions-rs/audit-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

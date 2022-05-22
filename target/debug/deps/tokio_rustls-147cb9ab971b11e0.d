@@ -1,0 +1,11 @@
+C:\Users\DAVID\Documents\GitHub\rust-example\target\debug\deps\tokio_rustls-147cb9ab971b11e0.rmeta: C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\lib.rs C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\client.rs C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\common\mod.rs C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\common\handshake.rs C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\server.rs
+
+C:\Users\DAVID\Documents\GitHub\rust-example\target\debug\deps\libtokio_rustls-147cb9ab971b11e0.rlib: C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\lib.rs C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\client.rs C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\common\mod.rs C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\common\handshake.rs C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\server.rs
+
+C:\Users\DAVID\Documents\GitHub\rust-example\target\debug\deps\tokio_rustls-147cb9ab971b11e0.d: C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\lib.rs C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\client.rs C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\common\mod.rs C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\common\handshake.rs C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\server.rs
+
+C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\lib.rs:
+C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\client.rs:
+C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\common\mod.rs:
+C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\common\handshake.rs:
+C:\Users\DAVID\.cargo\registry\src\github.com-1ecc6299db9ec823\tokio-rustls-0.22.0\src\server.rs:
