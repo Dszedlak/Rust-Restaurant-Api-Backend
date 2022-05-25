@@ -31,10 +31,11 @@ Server for the [Rust restaurant client](https://github.com/Dszedlak/rust_restaur
     ```https://github.com/Dszedlak/Rust-Restaurant-Api-Backend.git```
   
  2. Once downloaded/extracted, open a terminal in the 'Rust-Restaurant-Api-Backend' folder.
- 3. Once you have a terminal inside the *Rust-Restaurant-Api-Backend* folder, type **Cargo run**, and hit **Enter**
+ 3. Once you have a terminal inside the *Rust-Restaurant-Api-Backend* folder, type **Cargo run ROCKET_CLI_COLORS=off**, and hit **Enter**
  4. Allow some time for it to install necessary dependencies and build the server.
  5. Once completed, you should see *Running `target\debug\rust_restaurant_api.exe`* in your terminal. Additionally, to check for successful execution of the rust_restaurant_api.exe binary, check the 'server log'.
 
+Additionally, as a quality of life change, add a enviornment variable **ROCKET_CLI_COLORS="0"**, for a better log viewing experience.
 ## Workflows
 
 Unit testing, Code linting, Build execution and security workflows.
