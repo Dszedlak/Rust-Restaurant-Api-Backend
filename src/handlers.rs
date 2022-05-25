@@ -181,8 +181,8 @@ pub async fn end_session(mut db: Connection<db::Db>, table_nr: u8) -> Result<Str
 pub async fn remove_item(mut db: Connection<db::Db>, table_nr: u8, order_id: i64, item_id: i64) -> Result<String> {
 	let db_result = db::retrieve_active_table_session(&mut db, table_nr).await?;
 	match db_result {
-		Some(active_session) => {
-			let db_result = db::delete_item_from_order(&mut db, active_session.id, order_id, item_id).await?;
+		Some(_active_session) => {
+			let db_result = db::delete_item_from_order(&mut db, order_id, item_id).await?;
 			if db_result {
 				Ok(Json(String::from("success")))
 			}
@@ -195,7 +195,6 @@ pub async fn remove_item(mut db: Connection<db::Db>, table_nr: u8, order_id: i64
 		})
 	}
 }
-
 pub fn stage() -> AdHoc {
 	AdHoc::on_ignite("Register handlers", |rocket| async {
 		rocket.mount("/", rocket::routes![
@@ -213,4 +212,174 @@ pub fn stage() -> AdHoc {
 			remove_item
 		])
 	})
+}
+
+#[cfg(test)]
+mod tests {
+    use rocket::local::blocking::Client;
+    use rocket::http::{ContentType, Status};
+	use rocket::serde;
+	use rocket::serde::json::{Json, serde_json};
+	use crate::models;
+	use serde::{Serialize, Deserialize};
+	
+	#[test]
+    fn nothing_on_root_test() 
+	{
+        let client = Client::tracked(rocket::build()
+			.attach(super::stage())
+			.attach(super::db::stage()))
+			.expect("valid rocket instance");
+        let response = client.get("/").dispatch();
+        assert_eq!(response.status(), Status::NotFound);
+    }
+
+	#[test]
+	fn items_list_test() 
+	{
+        let client = Client::tracked(rocket::build()
+			.attach(super::stage())
+			.attach(super::db::stage()))
+			.expect("valid rocket instance");
+        let response = client.get("/items").dispatch();    
+		assert_eq!(response.status(), Status::Ok);
+		assert_eq!(response.content_type(), Some(ContentType::JSON));
+		let items = response.into_json::<Vec<super::models::Item>>().expect("Item list");
+		assert_ne!(items.len(), 0);
+	}
+
+	#[test]
+	fn single_item_test() 
+	{
+        let client = Client::tracked(rocket::build()
+			.attach(super::stage())
+			.attach(super::db::stage()))
+			.expect("valid rocket instance");
+        let response = client.get("/items/1").dispatch();    
+		assert_eq!(response.status(), Status::Ok);
+		assert_eq!(response.content_type(), Some(ContentType::JSON));
+		let _item = response.into_json::<super::models::Item>().expect("Item");
+	}
+
+
+	#[test]
+	fn add_remove_session_test()
+	{
+		let client = Client::tracked(rocket::build()
+		.attach(super::stage())
+		.attach(super::db::stage()))
+		.expect("valid rocket instance");
+
+		let response = client.post("/tables/14")
+        .header(ContentType::JSON)
+		.body(r##"{
+			"table_nr":14,
+			"customers":6,
+			"session_start": "UnitTest",
+			"active":true
+		}"##).dispatch();
+		assert_eq!(response.status(), Status::Ok);
+		assert_eq!(response.content_type(), Some(ContentType::JSON));
+		let _session = response.into_json::<super::models::TableSession>().expect("TableSession");
+
+		let response = client.delete("/tables/14").dispatch();
+		assert_eq!(response.status(), Status::Ok);
+		assert_eq!(response.into_string().unwrap().as_str(), "\"success\"");
+	}
+
+	#[test]
+	fn add_get_remove_order()
+	{
+		let client = Client::tracked(rocket::build()
+		.attach(super::stage())
+		.attach(super::db::stage()))
+		.expect("valid rocket instance");
+
+		let _response = client.post("/tables/14")
+        .header(ContentType::JSON)
+		.body(r##"{
+			"table_nr":14,
+			"customers":6,
+			"session_start": "UnitTest",
+			"active":true
+		}"##).dispatch();	
+
+		let response = client.post("/tables/14/orders")
+        .header(ContentType::JSON)
+		.body(r##"{
+			"order_items": 
+			[
+				{
+					"item_id": 2,
+					"amount": 4
+				},
+				{
+					"item_id": 5, 
+					"amount": 2
+				}
+			]
+		}"##).dispatch();
+
+		assert_eq!(response.status(), Status::Ok);
+		assert_eq!(response.content_type(), Some(ContentType::JSON));
+		let _order = response.into_json::<super::models::Order>().expect("Order");
+
+		let response = client.get("/tables/14/orders").dispatch();
+		assert_eq!(response.status(), Status::Ok);
+		assert_eq!(response.content_type(), Some(ContentType::JSON));
+
+		let order_id = response.into_json::<Vec<super::models::Order>>().expect("Order")[0].id.unwrap();
+		println!("Order_id is {:?}", order_id);
+
+		let request_uri = format!("/tables/14/orders/{:?}", order_id);
+		let response = client.get(request_uri).dispatch();
+		assert_eq!(response.status(), Status::Ok);
+		assert_eq!(response.content_type(), Some(ContentType::JSON));
+
+		let request_uri = format!("/tables/14/orders/{:?}", order_id);
+		let response = client.delete(request_uri).dispatch();
+		assert_eq!(response.status(), Status::Ok);
+		assert_eq!(response.into_string().unwrap().as_str(), "\"success\"");
+
+		let response = client.delete("/tables/14").dispatch();
+		assert_eq!(response.status(), Status::Ok);
+		assert_eq!(response.into_string().unwrap().as_str(), "\"success\"");
+	}
+
+	#[test]
+		fn get_sessions()
+		{
+			let client = Client::tracked(rocket::build()
+			.attach(super::stage())
+			.attach(super::db::stage()))
+			.expect("valid rocket instance");
+
+			let response = client.post("/tables/14")
+			.header(ContentType::JSON)
+			.body(r##"{
+				"table_nr":14,
+				"customers":6,
+				"session_start": "UnitTest",
+				"active":true
+			}"##).dispatch();
+
+			let response = client.get("/tables").dispatch();    
+			assert_eq!(response.status(), Status::Ok);
+			assert_eq!(response.content_type(), Some(ContentType::JSON));
+			let _session = response.into_json::<Vec<super::models::TableSession>>().expect("Session");
+			
+			let response = client.get("/tables/14").dispatch();    
+			assert_eq!(response.status(), Status::Ok);
+			assert_eq!(response.content_type(), Some(ContentType::JSON));
+			let _session = response.into_json::<Vec<super::models::TableSession>>().expect("Session");
+
+			let response = client.get("/tables/14/active").dispatch();    
+			assert_eq!(response.status(), Status::Ok);
+			assert_eq!(response.content_type(), Some(ContentType::JSON));
+			let _session = response.into_json::<super::models::TableSession>().expect("Session");
+
+			let response = client.delete("/tables/14").dispatch();
+			assert_eq!(response.status(), Status::Ok);
+			assert_eq!(response.into_string().unwrap().as_str(), "\"success\"");
+	}
 }

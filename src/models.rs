@@ -31,8 +31,7 @@ pub struct TableSession {
 #[derive(Debug, Clone, Deserialize, Serialize, Default)]
 #[serde(crate="rocket::serde")]
 pub struct Order {
-    #[serde(skip_deserializing)]
-    pub id: i64,
+    pub id: Option<i64>,
     #[serde(skip_deserializing)]
     pub table_session_id: i64,
     #[serde(skip_deserializing)]

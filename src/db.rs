@@ -154,6 +154,10 @@ pub async fn retrieve_order(db: &mut Connection<Db>, table_session_id: i64, orde
 }
 
 pub async fn delete_order(db: &mut Connection<Db>, table_session_id: i64, order_id: i64) -> std::result::Result<bool, sqlx::Error> {
+	sqlx::query("DELETE FROM OrderItems WHERE order_id = ?")
+		.bind(order_id)
+		.execute(&mut **db)
+		.await?;
 	let result = sqlx::query("DELETE FROM Orders WHERE id = ? and table_session_id = ?")
 		.bind(order_id)
 		.bind(table_session_id)
@@ -276,17 +280,14 @@ pub async fn deactivate_table_session(db: &mut Connection<Db>, table_session_id:
 	Ok(result.rows_affected() == 1)
 }
 
-pub async fn delete_item_from_order(db: &mut Connection<Db>, table_session_id: i64, order_id: i64, item_id: i64) -> std::result::Result<bool, sqlx::Error> {
+pub async fn delete_item_from_order(db: &mut Connection<Db>, order_id: i64, item_id: i64) -> std::result::Result<bool, sqlx::Error> {
 	let result = sqlx::query(r#"
 		DELETE FROM OrderItems 
 		WHERE order_id = ?
 		AND item_id = ?
-		AND Order.id == order_id
-		AND Order.table_session_id = ?
 		"#)
 		.bind(order_id)
 		.bind(item_id)
-		.bind(table_session_id)
 		.execute(&mut **db)
 		.await?;
 	Ok(result.rows_affected() == 1)
