@@ -44,4 +44,5 @@ Unit testing, Code linting, Build execution and security workflows.
 - Check if an item has already been cooked before deleting an order with a preparation time, if so dont allow it.
 - Server does not enforce non-allowing of duplicate items in an order. It should check if the item is used twice and could correct it by appropriately increasing the amount.
 
+All Unit tests work seperately. Unfortunately, they do not pass when all tests are run. This is a very much needed improvement.
 
