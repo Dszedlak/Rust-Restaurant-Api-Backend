@@ -26,14 +26,16 @@ Server for the [Rust restaurant client](https://github.com/Dszedlak/rust_restaur
 
 1. Download/checkout the repository:
    
-    ```gh repo clone Dszedlak/Rust-Restaurant-Api-Backend```
+    ```git clone https://github.com/Dszedlak/Rust-Restaurant-Api-Backend.git```
   
-    ```https://github.com/Dszedlak/Rust-Restaurant-Api-Backend.git```
+    ```wget https://github.com/Dszedlak/Rust-Restaurant-Api-Backend.git```
   
  2. Once downloaded/extracted, open a terminal in the 'Rust-Restaurant-Api-Backend' folder.
- 3. Once you have a terminal inside the *Rust-Restaurant-Api-Backend* folder, type **Cargo run**, and hit **Enter**
+ 3. Once you have a terminal inside the *Rust-Restaurant-Api-Backend* folder (if you do not, please cd into the foler), type **Cargo run**, and hit **Enter**
  4. Allow some time for it to install necessary dependencies and build the server.
- 5. Once completed, you should see *Running `target\debug\rust_restaurant_api.exe`* in your terminal. Additionally, to check for successful execution of the rust_restaurant_api.exe binary, check the 'server log'.
+ 5. Once completed, you should see *Running `target\debug\rust_restaurant_api.exe`* in your terminal. Additionally, to check for successful execution of the rust_restaurant_api.exe binary, check the 'server log' which is generated on execution of the binary.
+
+*Note, the server runs on localhost:8000
 
 Additionally, as a quality of life change, add a enviornment variable **ROCKET_CLI_COLORS="0"**, for a better log viewing experience.
 ## Workflows
